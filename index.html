@@ -6,7 +6,6 @@ TODO:
 <html>
 	<head>
 		<title>6th Element Website</title>
-		<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
 		 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<style>
 			html, body {margin-top:0;}
@@ -19,39 +18,76 @@ TODO:
 			    src: url(font/DroidSans.woff);
 			    font-weight:400;
 			}
+			@font-face{
+			    font-family: Nevis;
+			    src: url(font/nevis.ttf);
+			    font-weight:400;
+			}
 			canvas#logoCanvas {
 				border:0px solid black;
 				display:block;
 				margin:0 auto;
 			}
-			div.navBarContainer {
-				width:80%;
+			#topBarContainer {
+				width:100%;
 				height:30px;
 				margin:0px auto;
 				margin-bottom: 20px;
+			}
+			#topBarContainer > div {
+				float:left;
+			}
+			div#navBarLogo h1 {
+				font-family:Nevis, Calibri, sans-serif;
+				font-size:12pt;
+				font-variant: small-caps;
+			}
+			div#navBarLogo {
+				text-align: middle;
+				visibility: hidden;
+			}
+			div#navBarContainer {
+				width:80%;
 				padding: 5px 10px;
 				color:white;
 				background:#666666;
-				
 			}
 			ul.navBar {
+				display:block;
 				list-style: none;
 			}
 			ul.navBar li {
-				display:inline-block;
+				display:block;
+				float:left;
+				cursor:pointer;
+				vertical-align: middle;
+				margin: -8px 20px 0px 10px; /*top right bottom left*/ /*topbot leftright*/
+				white-space: nowrap;
+				width:10%;
+				max-width:100px;
+				height:100%;
+			}
+			ul.navBar a {
+				color:white;
+				text-decoration: none;
 			}
 		</style>
 	</head>
 	<body>
-		<div class="navBarContainer">
-			<ul class="navBar">
-				<li>Home</li>
-				<li>Stuff</li>
-				<li>About Us</li>
-				<li>Contact Us</li>
-			</ul>
+		<div id="topBarContainer">
+			<div id="navBarLogo">
+				<h1>The&nbsp;<wbr>Sixth<br>Element</h1>
+			</div>
+			<div id="navBarContainer">
+				<ul class="navBar">
+					<li><a href="">Home</a></li>
+					<li><a href="">Stuff</a></li>
+					<li><a href="">About Us</a></li>
+					<li><a href="">Contact Us</a></li>
+				</ul>
+			</div>
 		</div>
-		<canvas id="logoCanvas" width="650" height="650">The 6th Element</canvas>
+		<canvas id="logoCanvas" width="600" height="600">The 6th Element</canvas>
 		<script>
 if ( !window.requestAnimationFrame ) {
  
@@ -197,6 +233,15 @@ if ( !window.requestAnimationFrame ) {
 				ctx.textBaseline="bottom";
 				ctx.font = "bold 30pt DroidSans";
 				ctx.fillText("th",o.x+45,o.y-10);
+				ctx.beginPath();
+				ctx.arc(o.x,o.y,smallRad,0,2*Math.PI);
+				ctx.closePath();
+				if (ctx.mouseInPath()) {
+					ctx.fillStyle = "#441106";
+					ctx.textBaseline="top";
+					ctx.font = "normal 20pt DroidSans";
+					ctx.fillText("Science Quest",o.x,o.y+50);
+				}
 				ctx.restore();
 
 
@@ -223,7 +268,7 @@ if ( !window.requestAnimationFrame ) {
 				ctx.lineTo(o.x+smallRad*Math.cos(angStep),o.y-smallRad*Math.sin(angStep));
 				ctx.closePath();
 				//ctx.stroke();
-				if (ctx.isPointInPath(theMouse.x,theMouse.y)) {
+				if (ctx.mouseInPath()) {
 					ctx.translate(-100*Math.cos(angStep),-100*Math.sin(angStep)); //LOOK: this is needed to make it "pop out" of the circle, since translation is rectangular-based
 				}
 				ctx.strokeStyle="#CCC";
@@ -274,11 +319,11 @@ if ( !window.requestAnimationFrame ) {
 			*/
 			var time = 0;
 			var incr = 0;
+			window.timeLim = 300;
 			function draw() { setTimeout(function() {
 				c.width=c.width;
 				ctx.fillText("Time: "+time+"|"+Math.round(incr),c.width-100,c.height-20)
-				incr = 4000;
-				timeLim = 300;
+				incr = 4000; //beginning speed
 				if (time<=timeLim) {
 					//incr = 1*incr*Math.exp(-0.00713558*time);
 					incr = incr*Math.pow(Math.pow(360/incr,1/timeLim),time);
@@ -286,11 +331,12 @@ if ( !window.requestAnimationFrame ) {
 				}
 				else {incr = time;}
 
+				setUpScene();
 				drawAllImages();
 				//ctx.fillStyle="#FFF";
 				//ctx.strokeStyle="#FFF";
 				//ctx.arc()
-				setUpScene();
+				
 				//drawParts();
 				//time++;
 				requestAnimationFrame(draw);
@@ -312,6 +358,9 @@ if ( !window.requestAnimationFrame ) {
 			  x: evt.clientX - rect.left,
 			  y: evt.clientY - rect.top
 			};
+			}
+			ctx.mouseInPath = function() {
+				return ctx.isPointInPath(theMouse.x,theMouse.y);
 			}
 
 			c.addEventListener('mousemove', function(evt) {
