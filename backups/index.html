@@ -10,10 +10,6 @@ TODO:
 		 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<style>
 			html, body {margin-top:0;}
-			body {
-				font-family: Arial, sans-serif;
-				font-size:11pt;
-			}
 			@font-face{
 			    font-family: DroidSans;
 			    src: url(font/DroidSans.woff);
@@ -24,34 +20,11 @@ TODO:
 				display:block;
 				margin:0 auto;
 			}
-			div.navBarContainer {
-				width:80%;
-				height:30px;
-				margin:0px auto;
-				margin-bottom: 20px;
-				padding: 5px 10px;
-				color:white;
-				background:#666666;
-				
-			}
-			ul.navBar {
-				list-style: none;
-			}
-			ul.navBar li {
-				display:inline-block;
-			}
 		</style>
 	</head>
 	<body>
-		<div class="navBarContainer">
-			<ul class="navBar">
-				<li>Home</li>
-				<li>Stuff</li>
-				<li>About Us</li>
-				<li>Contact Us</li>
-			</ul>
-		</div>
-		<canvas id="logoCanvas" width="650" height="650">The 6th Element</canvas>
+		<div style="width:80%;height:30px;margin:0px auto; margin-bottom: 20px; padding: 5px 10px; color:white;background:#666666;text-align:center;">Title bar</div>
+		<canvas id="logoCanvas" width="550" height="550">The 6th Element</canvas>
 		<script>
 if ( !window.requestAnimationFrame ) {
  
@@ -157,7 +130,6 @@ if ( !window.requestAnimationFrame ) {
 				//fire:
 				//rotateAboutCenter(angStep);
 				img.drawImgToFit(img.fire,0,10,-20,-5);
-				
 				//water:
 				rotateAboutCenter(angStep);
 				img.drawImgToFit(img.water,0,10,-50);
@@ -170,17 +142,16 @@ if ( !window.requestAnimationFrame ) {
 				//space:
 				rotateAboutCenter(angStep);
 				img.drawImgToFit(img.stars,0,10);
-				
 				//?:
 				//rotateAboutCenter(angStep);
 				//var r = img.drawImgToFit(null,0,0,0,0,true);
-				//ctx.textAlign="center";
-				//ctx.fillStyle="#007744";
-				//ctx.font = "bold 80pt DroidSans";
-				//ctx.textBaseline="bottom";
+				ctx.textAlign="center";
+				ctx.fillStyle="#007744";
+				ctx.font = "bold 80pt DroidSans";
+				ctx.textBaseline="bottom";
 				//ctx.fillText("?",r.x,o.y-smallRad);
-				//ctx.strokeStyle="#000000";
-				//ctx.lineWidth=2;
+				ctx.strokeStyle="#000000";
+				ctx.lineWidth=2;
 				//ctx.strokeText("?",r.x,o.y-smallRad);
 				//ctx.restore();
 				//console.log(ctx.textBaseline)
@@ -205,52 +176,28 @@ if ( !window.requestAnimationFrame ) {
 				//img.drawImgToFit = null;
 				//largeRad2=largeRad;
 				ctx.save();
-				//hack();
-				//ctx.fillStyle = "#FFF";
-				ctx.beginPath();
-				ctx.moveTo(o.x+smallRad*Math.cos(angStep),o.y-smallRad*Math.sin(angStep));
-				ctx.lineTo(o.x+largeRad2*Math.cos(angStep),o.y-largeRad2*Math.sin(angStep));
-				ctx.moveTo(o.x+smallRad*Math.cos(angStep2),o.y-smallRad*Math.sin(angStep2));
-				ctx.lineTo(o.x+largeRad2*Math.cos(angStep2),o.y-largeRad2*Math.sin(angStep2));
-				ctx.closePath();
-				//ctx.stroke();
-				ctx.beginPath();
-				ctx.moveTo(o.x+largeRad2*Math.cos(angStep),o.y-largeRad2*Math.sin(angStep));
-				ctx.arc(o.x,o.y,largeRad2,-1*angStep,-1*angStep2,true);
-				ctx.lineTo(o.x+largeRad2*Math.cos(angStep2),o.y-largeRad2*Math.sin(angStep2));
-				ctx.lineTo(o.x+smallRad*Math.cos(angStep2),o.y-smallRad*Math.sin(angStep2));
-				ctx.arc(o.x,o.y,smallRad,-1*angStep,-1*angStep2,true);
-				ctx.lineTo(o.x+smallRad*Math.cos(angStep),o.y-smallRad*Math.sin(angStep));
-				ctx.closePath();
-				//ctx.stroke();
-				if (ctx.isPointInPath(theMouse.x,theMouse.y)) {
-					ctx.translate(-100*Math.cos(angStep),-100*Math.sin(angStep)); //LOOK: this is needed to make it "pop out" of the circle, since translation is rectangular-based
-				}
+				hack();
 				ctx.strokeStyle="#CCC";
-				ctx.lineWidth = 2;
 				ctx.beginPath();
 				ctx.moveTo(o.x+smallRad*Math.cos(angStep),o.y-smallRad*Math.sin(angStep));
 				ctx.lineTo(o.x+largeRad2*Math.cos(angStep),o.y-largeRad2*Math.sin(angStep));
-				ctx.moveTo(o.x+smallRad*Math.cos(angStep2),o.y-smallRad*Math.sin(angStep2));
-				ctx.lineTo(o.x+largeRad2*Math.cos(angStep2),o.y-largeRad2*Math.sin(angStep2));
-				ctx.closePath();
-				ctx.stroke();
-				ctx.beginPath();
-				ctx.moveTo(o.x+largeRad2*Math.cos(angStep),o.y-largeRad2*Math.sin(angStep));
+				//ctx.moveTo(o.x+largeRad2*Math.cos(angStep2),o.y-largeRad2*Math.sin((angStep2)));
 				ctx.arc(o.x,o.y,largeRad2,-1*angStep,-1*angStep2,true);
-				ctx.lineTo(o.x+largeRad2*Math.cos(angStep2),o.y-largeRad2*Math.sin(angStep2));
+				//ctx.moveTo(o.x+largeRad2*Math.cos(angStep),o.y-largeRad2*Math.sin(angStep));
+				//ctx.arc(o.x,o.y,largeRad2,-1*(angStep2),-1*angStep);
+				//ctx.lineTo(o.x+largeRad2*Math.cos(angStep2),o.y-largeRad2*Math.sin((angStep2)));
 				ctx.lineTo(o.x+smallRad*Math.cos(angStep2),o.y-smallRad*Math.sin(angStep2));
 				ctx.arc(o.x,o.y,smallRad,-1*angStep,-1*angStep2,true);
-				ctx.lineTo(o.x+smallRad*Math.cos(angStep),o.y-smallRad*Math.sin(angStep));
+				//ctx.moveTo(o.x+smallRad*Math.cos(angStep),o.y-smallRad*Math.sin(angStep));
+				//ctx.moveTo(o.x+largeRad2*Math.cos(angStep),o.y-largeRad2*Math.sin(angStep));
 				ctx.closePath();
 				//ctx.stroke(); //TODO: it renders a line inside the arc
-				//ctx.restore(); //TODO: this is NOT from the hack() before
-				//ctx.save();
-				/*if (ctx.isPointInPath(theMouse.x,theMouse.y)) {
+				ctx.restore(); //TODO: this is NOT from the hack() before
+				ctx.save();
+				if (ctx.isPointInPath(theMouse.x,theMouse.y)) {
 					ctx.translate(0,-100);
-				}*/
+				}
 				ctx.clip();
-				hack2(); //TODO!!! WAAAAAAA!!!
 				if (typeof xOffset === "undefined") xOffset=0;
 				if (typeof yOffset === "undefined") yOffset=0;
 				if (typeof widthOffset === "undefined") widthOffset=0;
@@ -261,7 +208,7 @@ if ( !window.requestAnimationFrame ) {
 					tW = curImg.width/curImg.height*tH; //maintains aspect ratio; widthOffset is now unimp. TODO change this def to img.d declaration
 					ctx.drawImage(curImg, o.x-tW/2+xOffset, o.y-smallRad*Math.sin(angStep)-tH-yOffset,tW,tH);
 					ctx.restore();
-					//ctx.restore(); //extra - just in case hack goes away
+					ctx.restore(); //extra - just in case hack goes away
 			}
 			//ctx.fillText("E l e m e n t",120,100);
 			/*
@@ -302,9 +249,6 @@ if ( !window.requestAnimationFrame ) {
 			}
 			function hack() { //TODO: Um...?
 				rotateAboutCenter(angStep*1/4);
-			}
-			function hack2() { //TODO: Um...?
-				rotateAboutCenter(angStep*-1/4);
 			}
 			function getMousePos(canvas, evt) {
 			var rect = canvas.getBoundingClientRect();
