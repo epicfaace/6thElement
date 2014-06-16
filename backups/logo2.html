@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<!--
+TODO:
+*Make elements' images maintain aspect ratio
+-->
+<html>
+	<head>
+		<title>6th Element Website</title>
+		<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+		 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<style>
+			html, body {margin-top:0;}
+			@font-face{
+			    font-family: DroidSans;
+			    src: url(font/DroidSans.woff);
+			    font-weight:400;
+			}
+			canvas#logoCanvas {
+				border:0px solid black;
+				display:block;
+				margin:0 auto;
+			}
+		</style>
+	</head>
+	<body>
+		<div style="width:80%;height:30px;margin:0px auto; margin-bottom: 20px; padding: 5px 10px; color:white;background:#666666;text-align:center;">Title bar</div>
+		<canvas id="logoCanvas" width="550" height="550">The 6th Element</canvas>
+		<script>
+if ( !window.requestAnimationFrame ) {
+ 
+	window.requestAnimationFrame = ( function() {
+ 
+		return window.webkitRequestAnimationFrame ||
+		window.mozRequestAnimationFrame ||
+		window.oRequestAnimationFrame ||
+		window.msRequestAnimationFrame ||
+		function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+ 
+			window.setTimeout( callback, 1000 / 60 );
+ 
+		};
+ 
+	} )();
+ 
+}
+//http://creativejs.com/resources/requestanimationframe/
+			window.c = document.getElementById("logoCanvas");
+			window.ctx = c.getContext("2d");
+			window.largeRad = 250;
+			window.smallRad=110;
+			window.largeShadowBlur = 42;
+			window.largeRad2 = largeRad-largeShadowBlur/2;
+			window.img = {};
+			window.angStep = 2/5*Math.PI;
+			window.angStep2 = 2*angStep;
+			window.theMouse = {"x":0,"y":0};
+			var o = {"x":c.width/2,"y":c.height/2}; //origin
+			initImgs();
+			function initImgs() {
+				ctx.fillText("Loading...",o.x,o.y);
+				setUpScene();
+				img.stars = new Image();
+				img.stars.src = "img/Saturn.png";
+				img.fire = new Image();
+				img.fire.src = "img/fire.svg";
+				img.air = new Image();
+				img.air.src = "img/air.png";
+				img.earth = new Image();
+				img.earth.src = "img/earth.png";
+				img.water = new Image();
+				img.water.src = "img/water.svg";
+				img.question = new Image();
+				//img.question.src = "img/question.jpg";
+				draw();
+			}
+			function setUpScene() {
+				ctx.fillStyle="#DD2211";
+				ctx.font = "40pt DroidSans";
+				var elemX = 160;
+				var elemY = 100;
+				ctx.strokeStyle="#EEEFFF";
+				ctx.lineWidth=2;
+				ctx.shadowColor="#011111";
+				ctx.shadowBlur = largeShadowBlur;
+				//big circle
+				ctx.beginPath();
+				ctx.arc(o.x,o.y,largeRad,0,2*Math.PI);
+				ctx.closePath();
+				ctx.stroke();
+				//small circle
+				ctx.strokeStyle="#CCC";
+				ctx.shadowBlur=0;
+				ctx.beginPath();
+				ctx.arc(o.x,o.y,smallRad,0,2*Math.PI);
+				ctx.closePath();
+				ctx.stroke();
+				var largeEdge = largeRad-42/2; //TODO: replace with largeRadius2
+				ctx.save();
+				//rotateAboutCenter(angStep*1/4); //hack no longer is needed!
+				for (var theta = 0; theta<=2*Math.PI; theta+=angStep) {
+					ctx.beginPath();
+					ctx.moveTo(o.x+smallRad*Math.cos(theta),o.y+smallRad*Math.sin(theta));
+					ctx.lineTo(o.x+largeEdge*Math.cos(theta),o.y+largeEdge*Math.sin(theta));
+					ctx.closePath();
+					ctx.stroke();
+				}
+				ctx.restore();
+			}
+			function drawParts() {
+				ctx.textAlign="center";
+				for (var i = 0; i<6; i++) {
+					names = ["Fire","Water","Earth","Air","Space","?"];
+					rotateAboutCenter(angStep);
+					ctx.fillStyle="#AA1100";
+					ctx.font = "20pt DroidSans";
+					ctx.textAlign="center";
+					ctx.fillText(names[i],o.x,o.y-smallRad);
+				}
+			}
+			function drawAllImages() {
+				img.default = {"width": smallRad*Math.cos(angStep)-smallRad*Math.cos(angStep2)+40,"height":largeRad*Math.sin(angStep)-smallRad*Math.sin(angStep)-30}; //TODO/note: tW is unimp. now
+				img.d = img.default; img.d.w = img.d.width; img.d.h = img.d.height;
+				//ctx.save();
+				ctx.beginPath();
+				ctx.arc(o.x,o.y,largeRad,0,Math.PI*2);
+				ctx.closePath();
+				ctx.clip();
+				//fire:
+				//rotateAboutCenter(angStep);
+				img.drawImgToFit(img.fire,0,10,-20,-5);
+				//water:
+				rotateAboutCenter(angStep);
+				img.drawImgToFit(img.water,0,10,-50);
+				//earth:
+				rotateAboutCenter(angStep);
+				img.drawImgToFit(img.earth,0,10,-50,-10);
+				//air:
+				rotateAboutCenter(angStep);
+				img.drawImgToFit(img.air,0,10);
+				//space:
+				rotateAboutCenter(angStep);
+				img.drawImgToFit(img.stars,0,10);
+				//?:
+				//rotateAboutCenter(angStep);
+				//var r = img.drawImgToFit(null,0,0,0,0,true);
+				ctx.textAlign="center";
+				ctx.fillStyle="#007744";
+				ctx.font = "bold 80pt DroidSans";
+				ctx.textBaseline="bottom";
+				//ctx.fillText("?",r.x,o.y-smallRad);
+				ctx.strokeStyle="#000000";
+				ctx.lineWidth=2;
+				//ctx.strokeText("?",r.x,o.y-smallRad);
+				ctx.restore();
+				//console.log(ctx.textBaseline)
+
+				//center 6:
+				ctx.save();
+				ctx.resetTransform();
+				ctx.fillStyle="#000000;"
+				ctx.lineWidth=2;
+				ctx.font = "bold 100pt DroidSans";
+				ctx.textBaseline="middle";
+				ctx.textAlign="center";
+				ctx.fillText("6",o.x-10,o.y);
+				ctx.textBaseline="bottom";
+				ctx.font = "bold 30pt DroidSans";
+				ctx.fillText("th",o.x+45,o.y-10);
+				ctx.restore();
+
+
+			}
+			img.drawImgToFit = function(curImg,xOffset,yOffset,widthOffset,heightOffset,drawTxt) {
+				//img.drawImgToFit = null;
+				//largeRad2=largeRad;
+				ctx.beginPath();
+				ctx.moveTo(o.x+smallRad*Math.cos(angStep),o.y-smallRad*Math.sin(angStep));
+				ctx.lineTo(o.x+largeRad2*Math.cos(angStep),o.y-largeRad2*Math.sin(angStep));
+				//ctx.moveTo(o.x+largeRad2*Math.cos(angStep2),o.y-largeRad2*Math.sin((angStep2)));
+				ctx.arc(o.x,o.y,largeRad2,-1*angStep,-1*angStep2,true);
+				//ctx.moveTo(o.x+largeRad2*Math.cos(angStep),o.y-largeRad2*Math.sin(angStep));
+				//ctx.arc(o.x,o.y,largeRad2,-1*(angStep2),-1*angStep);
+				//ctx.lineTo(o.x+largeRad2*Math.cos(angStep2),o.y-largeRad2*Math.sin((angStep2)));
+				ctx.lineTo(o.x+smallRad*Math.cos(angStep2),o.y-smallRad*Math.sin(angStep2));
+				ctx.arc(o.x,o.y,smallRad,-1*angStep,-1*angStep2,true);
+				//ctx.moveTo(o.x+smallRad*Math.cos(angStep),o.y-smallRad*Math.sin(angStep));
+				//ctx.moveTo(o.x+largeRad2*Math.cos(angStep),o.y-largeRad2*Math.sin(angStep));
+				ctx.closePath();
+				ctx.stroke(); //TODO: it renders a line inside the arc
+				ctx.save();
+				if (ctx.isPointInPath(theMouse.x,theMouse.y)) {
+					ctx.translate(0,-100);
+				}
+				ctx.clip();
+				if (typeof xOffset === "undefined") xOffset=0;
+				if (typeof yOffset === "undefined") yOffset=0;
+				if (typeof widthOffset === "undefined") widthOffset=0;
+				if (typeof heightOffset === "undefined") heightOffset=0;
+				//console.log(widthOffset,heightOffset);
+				var tW = img.d.width+widthOffset;
+				var tH = img.d.height+heightOffset;
+				if (typeof drawTxt === "undefined" || !drawTxt) {
+					tW = curImg.width/curImg.height*tH; //maintains aspect ratio; widthOffset is now unimp. TODO change this def to img.d declaration
+					ctx.drawImage(curImg, o.x-tW/2+xOffset, o.y-smallRad*Math.sin(angStep)-tH-yOffset,tW,tH);
+					ctx.restore();
+				}
+				else {
+					return {"x":o.x+xOffset,"y":o.y-smallRad*Math.sin(angStep)-yOffset};
+				}
+			}
+			//ctx.fillText("E l e m e n t",120,100);
+			/*
+			var imgStars = new Image();
+			imgStars.src = "stars.jpg";
+			imgStars.onload = function() {
+			ctx.drawImage(imgStars, 10, 10,60,60);
+			
+			};
+			*/
+			var time = 0;
+			var incr = 0;
+			function draw() { setTimeout(function() {
+				c.width=c.width;
+				ctx.fillText("Time: "+time+"|"+Math.round(incr),c.width-100,c.height-20)
+				incr = 4000;
+				timeLim = 300;
+				if (time<=timeLim) {
+					//incr = 1*incr*Math.exp(-0.00713558*time);
+					incr = incr*Math.pow(Math.pow(360/incr,1/timeLim),time);
+					rotateAboutCenter(Math.PI/180*incr);
+				}
+				else {incr = time;}
+				drawAllImages();
+				//ctx.fillStyle="#FFF";
+				//ctx.strokeStyle="#FFF";
+				//ctx.arc()
+				setUpScene();
+				//drawParts();
+				//time++;
+				requestAnimationFrame(draw);
+			}, 1000/60);}; //draw();
+			function rotateAboutCenter(ang) {
+				ctx.translate(o.x,o.y);
+				ctx.rotate(ang);
+				ctx.translate(-o.x,-o.y);
+			}
+			function getMousePos(canvas, evt) {
+			var rect = canvas.getBoundingClientRect();
+			return {
+			  x: evt.clientX - rect.left,
+			  y: evt.clientY - rect.top
+			};
+			}
+
+			c.addEventListener('mousemove', function(evt) {
+			theMouse = getMousePos(c, evt);
+			//console.log(mousePos.x,mousePos.y);
+
+			}, false);
+		</script>
+	</body>
+</html>

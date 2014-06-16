@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>6th Element Website</title>
+		<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+		 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<style>
+			@font-face{
+			    font-family: DroidSans;
+			    src: url(font/DroidSans.woff);
+			    font-weight:400;
+			}
+			canvas#logoCanvas {
+				border:1px solid black;
+				display:block;
+				margin:0 auto;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="logoCanvas" width="450" height="200">The 6th Element</canvas>
+		<script>
+if ( !window.requestAnimationFrame ) {
+ 
+	window.requestAnimationFrame = ( function() {
+ 
+		return window.webkitRequestAnimationFrame ||
+		window.mozRequestAnimationFrame ||
+		window.oRequestAnimationFrame ||
+		window.msRequestAnimationFrame ||
+		function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+ 
+			window.setTimeout( callback, 1000 / 60 );
+ 
+		};
+ 
+	} )();
+ 
+}
+//http://creativejs.com/resources/requestanimationframe/
+			window.c = document.getElementById("logoCanvas");
+			window.ctx = c.getContext("2d");
+			ctx.fillStyle="#DD2211";
+			ctx.font = "40pt DroidSans";
+			var elemX = 160;
+			var elemY = 100;
+			//ctx.fillText("E l e m e n t",120,100);
+			/*
+			var imgStars = new Image();
+			imgStars.src = "stars.jpg";
+			imgStars.onload = function() {
+			ctx.drawImage(imgStars, 10, 10,60,60);
+			
+			};
+			*/
+			var time = 0;
+			var mYPOS = elemY-30;
+			var mYVEL = -10;
+			var mBOUNCEHEIGHT = 10;
+			createLetters();
+			function draw() { setTimeout(function() {
+				c.width=c.width;
+				//console.log("hi");
+				ctx.fillStyle="#AA1100";
+				ctx.font = "40pt DroidSans";
+				if (time<=315) {
+				ctx.save();				
+				//ctx.translate(125, 40);
+				ctx.translate(125,40+elemY-100);
+				ctx.rotate(-1*(315-time)*Math.PI/180);
+				ctx.textAlign = "center";
+				ctx.fillText("E", 10, 60);
+				ctx.restore(); }
+				else {
+				ctx.fillText("E", 120, elemY);
+				}
+
+				ctx.fillStyle="#990000";
+				if (time>=100 && time<=200) {
+				var curTime = time-100;
+				ctx.fillText("l",200-curTime*40/100,curTime*elemY/100);
+				}
+				else if (time>=200) {
+				ctx.fillText("l", 160, elemY);
+				}
+
+				ctx.fillStyle="#771100";
+				if (time>=150 && time<=250) {
+				var curTime = time-150;
+				ctx.fillText("e",220-curTime*40/100,curTime*elemY/100);
+				}
+				else if (time>=200) {
+				ctx.fillText("e", 180, elemY);
+				}
+
+				//ctx.fillStyle="#661133";
+				ctx.fillStyle="#553311";
+				if (time>=160 && time<=360) {
+				var curTime = time-160;
+				//mYVEL+=curTime*.05;
+				mYVEL+=1;
+				if (mYPOS>=elemY) {
+					mYVEL=-1*mBOUNCEHEIGHT;
+					mBOUNCEHEIGHT*=.8;
+				}
+				mYPOS+=mYVEL;
+				ctx.fillText("m",215,mYPOS);
+				//console.log(mYVEL,mYPOS);
+				}
+				else if (time>=360 && time<=380) {
+					//console.log(mYPOS);
+					mYPOS += (elemY-mYPOS)/(380-time);
+					ctx.fillText("m", 215, mYPOS);
+				}
+				else if (time>=380) {
+					ctx.fillText("m", 215, elemY);
+				}
+
+				ctx.fillStyle="#335522";
+				if (time>=200 && time<=340) {
+				var curTime = time-200;
+				ctx.fillText("e",225+curTime*40/140,200-curTime*(c.height-elemY)/140);
+				}
+				else if (time>=200) {
+				ctx.fillText("e", 265, elemY);
+				}
+				ctx.fillStyle="#113311";
+				if (time>=200 && time<=340) {
+				var curTime = time-200;
+				ctx.fillText("n",260+curTime*40/140,200-curTime*(c.height-elemY)/140);
+				}
+				else if (time>=200) {
+				ctx.fillText("n", 300, elemY);
+				}
+				ctx.fillStyle="#001100";
+				if (time>=200 && time<=340) {
+				var curTime = time-200;
+				ctx.fillText("t",295+curTime*40/140,200-curTime*(c.height-elemY)/140);
+				}
+				else if (time>=200) {
+				ctx.fillText("t", 335, elemY);
+				}
+				time+=3;
+				requestAnimationFrame(draw);
+			}, 1000/60);}; draw();
+			function createLetters() {
+				$("<canvas id='letterE' width='100' height='100'></canvas>").appendTo("body");
+				var ctx = document.getElementById('letterE').getContext('2d');
+				  ctx.translate(75,75);
+				  for (i=1;i<6;i++){
+				    ctx.save();
+				    ctx.fillStyle = 'rgb('+(51*i)+','+(255-51*i)+',255)';
+				    for (j=0;j<i*6;j++){
+				    ctx.rotate(Math.PI*2/(i*6));
+				    ctx.beginPath();
+				    ctx.arc(0,i*12.5,5,0,Math.PI*2,true);
+				    ctx.fill();
+				    }
+				   // ctx.restore();
+				  }
+			}
+		</script>
+	</body>
+</html>
